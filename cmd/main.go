@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
-	"hlsDownloader/pkg"
+	HLSDownloader "github.com/cristiancll/HLSDownloader/pkg"
 	"log"
 	"os"
 )
@@ -50,7 +50,7 @@ func main() {
 		return
 	}
 
-	hls, err := hlsDownloader.New(URL, output)
+	hls, err := HLSDownloader.New(URL, output)
 	if err != nil {
 		log.Printf("Error creating hlsDownloader: %v\n", err)
 		return
