@@ -25,8 +25,9 @@ type segment struct {
 }
 
 type downloadResult struct {
-	err   error
-	seqId uint64
+	err           error
+	seqId         uint64
+	totalSegments uint64
 }
 
 type workerController struct {

@@ -14,7 +14,9 @@ import (
 	"time"
 )
 
-type Incrementer interface {
+type BarUpdater interface {
+	SetTotal(total int)
+	SetCurrent(current int)
 	Increment()
 }
 
@@ -32,7 +34,7 @@ type hlsDownloader struct {
 	header *http.Header
 
 	workers int
-	bar     Incrementer
+	bar     BarUpdater
 }
 
 func New(URL string, output string) (*hlsDownloader, error) {
@@ -81,7 +83,7 @@ func (h *hlsDownloader) SetWorkers(workers int) error {
 	h.workers = workers
 	return nil
 }
-func (h *hlsDownloader) SetBar(bar *Incrementer) error {
+func (h *hlsDownloader) SetBar(bar *BarUpdater) error {
 	if h == nil {
 		return errors.New("attempt to set bar on nil instance")
 	}
@@ -242,7 +244,7 @@ func (h *hlsDownloader) processSegments(segments []*segment) error {
 		abort:          make(chan struct{}),
 		success:        make(chan struct{}),
 	}
-
+	h.bar.SetTotal(len(segments))
 	for i := 0; i < h.workers; i++ {
 		wc.wg.Add(1)
 		go h.downloadSegments(wc)
