@@ -49,6 +49,10 @@ const (
 	syncByte = uint8(71) //0x47
 )
 
+func DisableLogs() {
+	log.SetOutput(io.Discard)
+}
+
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 }
