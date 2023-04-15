@@ -244,7 +244,9 @@ func (h *hlsDownloader) processSegments(segments []*segment) error {
 		abort:          make(chan struct{}),
 		success:        make(chan struct{}),
 	}
-	h.bar.SetTotal(len(segments))
+	if h.bar != nil {
+		h.bar.SetTotal(len(segments))
+	}
 	for i := 0; i < h.workers; i++ {
 		wc.wg.Add(1)
 		go h.downloadSegments(wc)
