@@ -18,6 +18,7 @@ type BarUpdater interface {
 	SetTotal(total int)
 	SetCurrent(current int)
 	Increment()
+	Complete()
 }
 
 const defaultWorkers = 5
@@ -261,6 +262,9 @@ func (h *hlsDownloader) processSegments(segments []*segment) error {
 	for {
 		select {
 		case <-wc.success:
+			if h.bar != nil {
+				h.bar.Complete()
+			}
 			return nil
 		case result := <-wc.downloadResult:
 			if result.err != nil {
