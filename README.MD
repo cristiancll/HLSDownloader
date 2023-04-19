@@ -78,7 +78,7 @@ You are free to [download the binaries](https://github.com/cristiancll/HLSDownlo
 
 ```
 cd path/to/HLSDownloader/cmd
-go build -o HLSDownloader.exe
+go build -o ../bin/HLSDownloader.exe
 ```
 
 ## Usage
