@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func handleArgs() (string, string, int, error) {
+func handleArgs() (string, string, int, bool, error) {
 	var URL string
 	flag.StringVar(&URL, "url", "", "A http url of the HLS stream/m3u8 file to be downloaded")
 	if URL == "" {
@@ -30,6 +30,12 @@ func handleArgs() (string, string, int, error) {
 	helpCmd := flag.Bool("help", false, "Show this help menu with all the available options")
 	hCmd := flag.Bool("h", false, "Show help")
 
+	var debug bool
+	flag.BoolVar(&debug, "debug", false, "Enable debug logs")
+	if debug == false {
+		flag.BoolVar(&debug, "d", false, "Enable debug logs")
+	}
+
 	flag.Parse()
 
 	if *helpCmd || *hCmd {
@@ -38,19 +44,22 @@ func handleArgs() (string, string, int, error) {
 	}
 
 	if URL == "" {
-		return "", "", 0, errors.New("No url specified")
+		return "", "", 0, false, errors.New("No url specified")
 	}
-	return URL, output, workers, nil
+	return URL, output, workers, debug, nil
 }
 
 func main() {
-	URL, output, workers, err := handleArgs()
+	URL, output, workers, debug, err := handleArgs()
 	if err != nil {
 		log.Printf("Invalid arguments: %v\n", err)
 		return
 	}
 
 	hls, err := HLSDownloader.New(URL, output)
+	if debug {
+		HLSDownloader.EnableLogs()
+	}
 	if err != nil {
 		log.Printf("Error creating hlsDownloader: %v\n", err)
 		return

@@ -38,6 +38,7 @@ type hlsDownloader struct {
 }
 
 func New(URL string, output string) (*hlsDownloader, error) {
+	DisableLogs()
 	out, err := validateParameters(URL, output)
 	if err != nil {
 		return nil, err
