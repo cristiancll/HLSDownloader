@@ -16,7 +16,6 @@ import (
 
 type BarUpdater interface {
 	SetTotal(total int)
-	SetCurrent(current int)
 	Increment()
 	Complete()
 }
@@ -84,11 +83,15 @@ func (h *hlsDownloader) SetWorkers(workers int) error {
 	h.workers = workers
 	return nil
 }
-func (h *hlsDownloader) SetBar(bar *BarUpdater) error {
+func (h *hlsDownloader) SetBar(externalBar interface{}) error {
 	if h == nil {
 		return errors.New("attempt to set bar on nil instance")
 	}
-	h.bar = *bar
+	bar, ok := externalBar.(BarUpdater)
+	if !ok {
+		return errors.New("externalBar must be of type BarUpdater")
+	}
+	h.bar = bar
 	return nil
 }
 
