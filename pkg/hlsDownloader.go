@@ -84,15 +84,11 @@ func (h *hlsDownloader) SetWorkers(workers int) error {
 	h.workers = workers
 	return nil
 }
-func (h *hlsDownloader) SetBar(externalBar interface{}) error {
+func (h *hlsDownloader) SetBar(externalBar BarUpdater) error {
 	if h == nil {
 		return errors.New("attempt to set bar on nil instance")
 	}
-	bar, ok := externalBar.(BarUpdater)
-	if !ok {
-		return errors.New("externalBar must be of type BarUpdater")
-	}
-	h.bar = bar
+	h.bar = externalBar
 	return nil
 }
 

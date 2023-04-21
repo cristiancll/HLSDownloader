@@ -13,7 +13,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -56,10 +55,6 @@ func EnableLogs() {
 
 func DisableLogs() {
 	log.SetOutput(io.Discard)
-}
-
-func init() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
 }
 
 func testFileWrite(out outParams) error {
